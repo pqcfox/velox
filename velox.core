@@ -4,25 +4,27 @@ description: Velox, a sleek parallel SHA-1 hash cracker
 
 filesets:
   arty_a7_100t:
-    files: [data/arty_a7_100t.xdc: {file_type: xcd}]
+    files: [data/arty_a7_100t.xdc: {file_type: xdc}]
 
   rtl:
     files: [rtl/velox.v]
     file_type: verilogSource
 
   tb:
-    files: [bench/velox_tb.v]
+    files: [tb/velox_tb.v]
     file_type: verilogSource
+    depend: [vlog_tb_utils]
 
 targets:
   default: &default
     filesets: [rtl]
-    toplevel: velox
     parameters: [clk_freq_hz]
+    toplevel: velox
 
   sim:
+    <<: *default
     default_tool: icarus
-    filesets: [tb]
+    filesets_append: [tb]
     toplevel: velox_tb
     parameters: [pulses=10]
     
@@ -30,10 +32,10 @@ targets:
     <<: *default
     default_tool: vivado
     filesets_append: [arty_a7_100t]
+    parameters_append: [clk_freq_hz=100000000]
     tools:
       vivado:
         part: xc7a100tcsg324-1
-    parameters: [clk_freq_hz=100000000]
 
 parameters:
   clk_freq_hz:
