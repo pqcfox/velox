@@ -8,24 +8,24 @@ filesets:
 
   rtl:
     files: [rtl/velox.v]
-	file_type: verilogSource
+    file_type: verilogSource
 
   tb:
     files: [bench/velox_tb.v]
-	file_type: verilogSource
+    file_type: verilogSource
 
 targets:
   default: &default
     filesets: [rtl]
-	toplevel: velox
-	parameters: [clk_freq_hz]
+    toplevel: velox
+    parameters: [clk_freq_hz]
 
   sim:
     default_tool: icarus
     filesets: [tb]
     toplevel: velox_tb
-	parameters: [pulses=10]
-	
+    parameters: [pulses=10]
+    
   synth:
     <<: *default
     default_tool: vivado
@@ -39,8 +39,8 @@ parameters:
   clk_freq_hz:
     datatype: int
     description: Clock frequency in Hz
-	paramtype: vlogparam
+    paramtype: vlogparam
   pulses:
     datatype: int
-	description: Number of pulses to run in testbench
-	paramtype: vlogparam
+    description: Number of pulses to run in testbench
+    paramtype: vlogparam
