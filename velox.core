@@ -1,0 +1,46 @@
+CAPI=2:
+name: foxmoder:crack:velox:0.1.0
+description: Velox, a sleek parallel SHA-1 hash cracker
+
+filesets:
+  arty_a7_100t:
+    files: [data/arty_a7_100t.xdc: {file_type: xcd}]
+
+  rtl:
+    files: [rtl/velox.v]
+	file_type: verilogSource
+
+  tb:
+    files: [bench/velox_tb.v]
+	file_type: verilogSource
+
+targets:
+  default: &default
+    filesets: [rtl]
+	toplevel: velox
+	parameters: [clk_freq_hz]
+
+  sim:
+    default_tool: icarus
+    filesets: [tb]
+    toplevel: velox_tb
+	parameters: [pulses=10]
+	
+  synth:
+    <<: *default
+    default_tool: vivado
+    filesets_append: [arty_a7_100t]
+    tools:
+      vivado:
+        part: xc7a100tcsg324-1
+    parameters: [clk_freq_hz=100000000]
+
+parameters:
+  clk_freq_hz:
+    datatype: int
+    description: Clock frequency in Hz
+	paramtype: vlogparam
+  pulses:
+    datatype: int
+	description: Number of pulses to run in testbench
+	paramtype: vlogparam
